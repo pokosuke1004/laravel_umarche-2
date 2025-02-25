@@ -2,5 +2,5 @@
   <x-slot name="header">こちらはもう一つのslot,headerの方です</x-slot>
   コンポーネントテスト１
 
-  <x-tests.card title="タイトル１" content="内容です１"></x-tests.card>
+  <x-tests.card title="タイトル1" content="内容です1" :message="$message"/>
 </x-tests.app>
