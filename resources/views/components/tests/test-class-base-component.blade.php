@@ -1,4 +1,6 @@
 <div>
     <!-- No surplus words or unnecessary actions. - Marcus Aurelius -->
-    クラスベースのコンポーネントです
+    クラスベースのコンポーネントです<br>
+    {{ $classBaseMessage}}<br>
+    {{ $defaultMessage}}
 </div>
