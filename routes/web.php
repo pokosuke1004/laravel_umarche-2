@@ -27,5 +27,6 @@ Route::get('/dashboard', function () {
 Route::get('/compoment_test1',[ComponentTestController::class,'component_test1']);
 Route::get('/compoment_test2',[ComponentTestController::class,'component_test2']);
 Route::get('/servicecontrollertest',[lifeControllerTest::class,'showServiceContainerTest']);
+Route::get('/serviceprovidertest',[lifeControllerTest::class,'showServiceProviderTest']);
 
 require __DIR__.'/auth.php';

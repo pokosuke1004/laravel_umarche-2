@@ -22,6 +22,15 @@ class lifeControllerTest extends Controller
     $sample->run();
     dd($sample,app());
     }
+    public function showServiceProviderTest(){
+        $encrypt=app()->make('encrypter');
+        $password=$encrypt->encrypt('password123');
+        
+        $sample=app()->make('serviceProviderTest');
+
+        dd($sample,$password,$encrypt->decrypt($password));
+
+    }
 }
 class Sample {
     public $message;
