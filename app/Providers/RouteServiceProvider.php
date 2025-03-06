@@ -12,17 +12,21 @@ class RouteServiceProvider extends ServiceProvider
 {
     /**
      * The path to the "home" route for your application.
-     *
+     *アプリケーションの「ホーム」ルートへのパス。
      * This is used by Laravel authentication to redirect users after login.
+     * ログイン後にユーザーをリダイレクトする場所
      *
      * @var string
      */
     public const HOME = '/dashboard';
+    public const OWNER_HOME = '/owner/dashboard';
+    public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * The controller namespace for the application.
-     *
+     *アプリケーションのコントローラー名前空間。
      * When present, controller route declarations will automatically be prefixed with this namespace.
+     * 存在する場合、コントローラーのルート宣言にはこの名前空間が自動的に接頭辞として付加されます。
      *
      * @var string|null
      */
@@ -30,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Define your route model bindings, pattern filters, etc.
-     *
+     *ルート モデルバインディング、パターン フィルターなどを定義します。
      * @return void
      */
     public function boot()
@@ -43,15 +47,30 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::prefix('/')
+                ->as('user.')
+                ->middleware('web')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+                ->group(base_path('routes/auth.php'));
+
+            Route::prefix('/admin')
+                ->as('admin.')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));  
+            
+                Route::prefix('/owner')
+                ->as('owner.')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/owner.php'));        
         });
+
     }
 
     /**
      * Configure the rate limiters for the application.
-     *
+     *アプリケーションのレート リミッタ-(レートリミッターとは、アプリケーションのAPIトラフィックを制限する機能)
      * @return void
      */
     protected function configureRateLimiting()
