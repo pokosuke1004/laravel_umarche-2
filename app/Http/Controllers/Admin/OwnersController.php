@@ -30,7 +30,7 @@ class OwnersController extends Controller
         // echo $date_parse.'<br>';
         // echo $date_now->year.'<br>';
 
-        $owners=Owner::select('name','email','created_at')->get();
+        $owners=Owner::select('id','name','email','created_at')->get();
         // $q_get=DB::table('owners')->select('name','created_at')->get();
         // $q_first=DB::table('owners')->select('name')->first();
         // $c_test=collect([
@@ -92,7 +92,9 @@ class OwnersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $owner = Owner::findOrFail($id);
+    
+        return view('admin.owners.edit',compact('owner'));
     }
 
     /**
@@ -104,7 +106,12 @@ class OwnersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $owner=Owner::findOrFail($id);
+        $owner->name = $request->name;
+        $owner->email = $request->email;
+        $owner->password = Hash::make($request->password);
+        $owner->save();
+        return redirect()->route('admin.owners.index')->with('message','オーナー情報を更新しました');
     }
 
     /**
