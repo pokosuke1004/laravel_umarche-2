@@ -30,7 +30,7 @@ class OwnersController extends Controller
         // echo $date_parse.'<br>';
         // echo $date_now->year.'<br>';
 
-        $owners=Owner::select('id','name','email','created_at')->get();
+        $owners=Owner::select('id','name','email','created_at')->paginate(3);
         // $q_get=DB::table('owners')->select('name','created_at')->get();
         // $q_first=DB::table('owners')->select('name')->first();
         // $c_test=collect([
