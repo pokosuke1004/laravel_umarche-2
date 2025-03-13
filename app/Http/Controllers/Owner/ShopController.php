@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
-use Illuminate\Support\Facades\Storage;
-use InterventionImage;
+use App\Http\Requests\UploadImmageRequest;
+use App\Services\ImageService;
 
 class ShopController extends Controller
 {
@@ -44,17 +44,13 @@ class ShopController extends Controller
 
     }
 
-    public function update(Request $request){
+    public function update(UploadImmageRequest $request){
        $imageFile= $request->image;
        if(!is_null($imageFile)&&$imageFile->isValid()){
+        $fileNameToStore=ImageService::upload($imageFile,'shops');
         // Storage::putFile('public/shops',$imageFile);
-        $fileName = uniqid(rand().'_'); //重複しないファイル名
-        $extension = $imageFile->extension();//取得した画像に拡張子をつける。
-        $fileNameToStore = $fileName. '.' . $extension;
         
-        $resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode();
         // dd($imageFile,$resizedImage);
-        Storage::put('public/shops/' . $fileNameToStore, $resizedImage );
        }
        return redirect()->route('owner.shops.index');
     }
