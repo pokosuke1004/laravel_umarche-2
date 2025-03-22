@@ -7,7 +7,6 @@ if($type==='products'){
 }
 @endphp
 
-?>
 <div>
   @if(empty($filename))
   <img src="{{asset('images/no_image.jpg')}}" alt="">
