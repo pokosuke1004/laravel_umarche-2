@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Image;
+use App\Models\Product;
+use App\Models\Owner;
+use App\Models\SecondaryCategory;
 
 class ProductController extends Controller
 {
@@ -12,9 +17,30 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(){
+        $this->middleware('auth:owners');
+        $this->middleware(function($request,$next){
+           $id=$request->route()->parameter('product');
+                if(!is_null($id)){
+                    $productsOwnerID=Product::findOrFail($id)->shop->owner->id;//文字列
+                    $productsId=(int)$productsOwnerID;
+                    //数字
+                        if($productsId!==Auth::id()){
+                            abort(404);
+                        }
+                }return $next($request);});
+                    
+    }
+
     public function index()
     {
-        //
+        // $products = Owner::findOrFail(Auth::id())->shop->product;
+        $ownerInfo = Owner::with('shop.product.imageFirst')
+        ->where('id',Auth::id())->get();
+
+        // dd($ownerInfo);
+
+        return view('owner.products.index',compact('ownerInfo'));
     }
 
     /**
