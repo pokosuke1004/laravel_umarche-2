@@ -22,9 +22,9 @@
                         
                       <div class="border rounded-md p-2 md:p-4">
                             
-                          <x-thumbnail :filename="$product->imageFirst->filename" type='products'/>
+                          <x-thumbnail filename="{{$product->imageFirst->filename ?? ''}}" type='products'/>
                           <div class="text-gray-700">
-                            {{-- {{$products->name}} --}}
+                            {{$product->name}}
                           </div>
                                 
                         </div>
