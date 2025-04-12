@@ -62,8 +62,8 @@
                       
                       <div class="p-2 w-1/2 mx-auto">
                         <div class="relative flex justify-around">
-                          <div><input type="radio" name="type" value="1" class="mr-2" checked>追加</div>
-                          <div><input type="radio" name="type" value="2" class="mr-2" >減少</div>
+                          <div><input type="radio" name="type" value="{{ \Constant::PRODUCT_LIST['add']}}" class="mr-2" checked>追加</div>
+                          <div><input type="radio" name="type" value="{{ \Constant::PRODUCT_LIST['reduce']}}" class="mr-2" >減少</div>
                         </div>
                       </div>
 
@@ -103,8 +103,8 @@
 
                       <div class="p-2 w-1/2 mx-auto">
                         <div class="relative flex justify-around">
-                          <div><input type="radio" name="is_selling" value="1" class="mr-2" @if($product->is_selling===1) checked @endif>販売中</div>
-                          <div><input type="radio" name="is_selling" value="0" class="mr-2" @if($product->is_selling===0) checked @endif>停止中</div>
+                          <div><input type="radio" name="is_selling" value="0" class="mr-2" @if($product->is_selling===1) checked @endif>販売中</div>
+                          <div><input type="radio" name="is_selling" value="1" class="mr-2" @if($product->is_selling===0) checked @endif>停止中</div>
                         </div>
                       </div>
 
