@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
+use App\Models\Product;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Storage;
@@ -125,6 +126,34 @@ class ImageController extends Controller
     public function destroy($id)
     {
         $image=Image::findOrFail($id);
+        
+        $imageInProduct=Product::where('image1',$image->id)
+        ->orwhere('image2',$image->id)
+        ->orwhere('image3',$image->id)
+        ->orwhere('image4',$image->id)
+        ->get();
+
+        if($imageInProduct){
+            $imageInProduct->each(function($product)use($image){
+            if($product->image1 === $image->id){
+                $product->image1 = null;
+                $product->save();
+            }
+            if($product->image2 === $image->id){
+                $product->image2 = null;
+                $product->save();
+            }
+            if($product->image3 === $image->id){
+                $product->image3= null;
+                $product->save();
+            }
+            if($product->image4 === $image->id){
+                $product->image4 = null;
+                $product->save();
+            }
+            }
+        );
+        }
 
         $filePath='public/products/'.$image->filename;
         
@@ -132,6 +161,8 @@ class ImageController extends Controller
         Storage::delete($filePath);  
         }      
         
+
+
         Image::findOrFail($id)->delete();
 
         return redirect()->route('owner.images.index')->with(['message'=>'画像を廃棄しました','status'=>'alert']);
