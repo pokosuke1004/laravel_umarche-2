@@ -13,4 +13,10 @@ php artisan storage:link
 
 storage/app/public/products フォルダ内に
 保存すると表示されます。
-productsフォルダがない場合は作成してください。
+(productsフォルダがない場合は作成してください。)
+
+ショップの画像も表示する場合は、
+storage/app/public/shops フォルダ内に
+保存すると表示されます。
+(shopsフォルダがない場合は作成してください。)
+
