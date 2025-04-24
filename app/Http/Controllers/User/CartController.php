@@ -60,25 +60,32 @@ class CartController extends Controller
         $lineItems=[];
         foreach($products as $product){
             $quantity='';
-            $quantity=Stock::where('product_id',$product->id)->sum('quantity');
+            $quantity=Stock::where('product_id',$product->id)->sum('quantity');//在庫
+            
             // 在庫よりカートの商品数が多かったら戻す
             if($product->pivot->quantity > $quantity)
             {
                 return redirect()->route('user.cart.index');
             }else{
-                $lineItem=[
-                    'name'=>$product->name,
-                    'description'=>$product->information,
-                    'amount'=>$product->price,
-                    'currency'=>'jpy',
-                    'quantity'=>$product->pivot->quantity,
-                ];   
-                array_push($lineItems, $lineItem);
-            }
-        // foreach終わり 
-        }
-        // dd($lineItems);
-        // 在庫情報変更マイナス処理
+                        $lineItem = [
+                            'price_data'=>[
+                                'unit_amount'=>$product->price,
+                                'currency'=>'jpy',
+                                'product_data'=>[
+                                    'name'=>$product->name,
+                                    'description'=>$product->information,
+                                ],
+                            ],
+                            'quantity' => $product->pivot->quantity,
+                        ];
+
+                        // dd($lineItem);
+                        array_push($lineItems, $lineItem);
+                    }
+                }
+                // dd($lineItems);
+
+        // 在庫の数を減らす
         foreach($products as $product){
             Stock::create([
                 'product_id'=>$product->id,
@@ -86,19 +93,22 @@ class CartController extends Controller
                 'quantity'=>$product->pivot->quantity * -1,
             ]);
         }
-        dd('テスト');
+        // dd('テスト');
         // ストライプ連結処置
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         $session=\Stripe\Checkout\Session::create([
-            'payment_method_types'=>['card'],
+            'payment_method_types' => ['card'], 
             'line_items'=>[$lineItems],
-            'mode'=>'payment',
-            'success_url'=>route('user.items.index'),
-            'cancel_url'=>route('user.cart.index'),
-        ]);
-        $publicKey=env('STRIPE_PUBLIC_KEY');
+            'mode' => 'payment',
+            'success_url' => route('user.items.index'),
+            'cancel_url' => route('user.cart.cancel'),
+            ]);
 
-        return view('user.checkout',compact('session','publicKey'));
+            
+        // $publicKey=env('STRIPE_PUBLIC_KEY');
+
+        // return view('user.checkout',compact('session','publicKey'));
+        return redirect($session->url,303);
     }
 }
 
