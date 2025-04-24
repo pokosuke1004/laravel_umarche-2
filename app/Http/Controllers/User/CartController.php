@@ -100,7 +100,7 @@ class CartController extends Controller
             'payment_method_types' => ['card'], 
             'line_items'=>[$lineItems],
             'mode' => 'payment',
-            'success_url' => route('user.items.index'),
+            'success_url' => route('user.cart.success'),
             'cancel_url' => route('user.cart.cancel'),
             ]);
 
@@ -110,5 +110,11 @@ class CartController extends Controller
         // return view('user.checkout',compact('session','publicKey'));
         return redirect($session->url,303);
     }
+    public function success(){
+        Cart::where('user_id',Auth::id())->delete();
+        
+        return redirect()->route('user.items.index');
+    }
 }
+
 
